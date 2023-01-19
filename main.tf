@@ -11,71 +11,49 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
-resource "aws_instance" "terraformlab1" {
+resource "aws_instance" "dev" {
   count         = 3
   ami           = "ami-06878d265978313ca"
   instance_type = "t2.micro"
   key_name      = "terraformlab1"
   tags = {
-    Name = "terraformlab1-${count.index}"
+    Name = "dev${count.index}"
   }
   vpc_security_group_ids =["${aws_security_group.terraformlab1_SG.id}"]
 }
 
-resource "aws_instance" "terraformlab1-dev1" {
+resource "aws_instance" "dev4" {
   ami           = "ami-06878d265978313ca"
   instance_type = "t2.micro"
   key_name      = "terraformlab1"
   tags = {
-    Name = "terraformlab1-dev1"
+    Name = "dev4"
   }
   vpc_security_group_ids =["${aws_security_group.terraformlab1_SG.id}"]
+  depends_on = [
+    aws_s3_bucket.terraformlab1bucket
+  ]
 }
 
-resource "aws_instance" "terraformlab1-dev2" {
+resource "aws_instance" "dev5" {
   ami           = "ami-06878d265978313ca"
   instance_type = "t2.micro"
   key_name      = "terraformlab1"
   tags = {
-    Name = "terraformlab1-dev2"
+    Name = "dev5"
   }
   vpc_security_group_ids =["${aws_security_group.terraformlab1_SG.id}"]
 }
 
-resource "aws_security_group" "terraformlab1_SG" {
-  name        = "terraformlab1_SG"
-  description = "SG for terraform lab1"
-
-  ingress {
-    description      = "SSH  from VPC"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
+resource "aws_s3_bucket" "terraformlab1bucket" {
+  bucket = "terraformlab1bucket"
   tags = {
-    Name = "allow_ssh"
-  }
-}
-
-resource "aws_s3_bucket" "terraformlab1_bucket" {
-  bucket = "terraformlab1_bucket"
-  tags = {
-    Name        = "terraformlab1_bucket"
+    Name        = "terraformlab1bucket"
     Environment = "terraformlab1"
   }
 }
 
-resource "aws_s3_bucket_acl" "terraformlab1_bucket_acl" {
-  bucket = aws_s3_bucket.terraformlab1_bucket.id
+resource "aws_s3_bucket_acl" "terraformlab1bucket_acl" {
+  bucket = aws_s3_bucket.terraformlab1bucket.id
   acl    = "private"
 }
