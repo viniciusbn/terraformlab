@@ -20,19 +20,19 @@ provider "aws" {
 
 resource "aws_instance" "dev" {
   count         = 3
-  ami           = "ami-06878d265978313ca"
-  instance_type = "t2.micro"
-  key_name      = "terraformlab1"
+  ami           = var.amis["us-east-1"]
+  instance_type = var.instance_type
+  key_name      = var.key_name
   tags = {
     Name = "dev${count.index}"
   }
   vpc_security_group_ids = ["${aws_security_group.terraformlab1_SG.id}"]
 }
 
-resource "aws_instance" "dev4" {
-  ami           = "ami-06878d265978313ca"
-  instance_type = "t2.micro"
-  key_name      = "terraformlab1"
+/*resource "aws_instance" "dev4" {
+  ami           = var.amis["us-east-1"]
+  instance_type = var.instance_type
+  key_name      = var.key_name
   tags = {
     Name = "dev4"
   }
@@ -40,12 +40,12 @@ resource "aws_instance" "dev4" {
   depends_on = [
     aws_s3_bucket.terraformlab1bucket
   ]
-}
+}*/
 
 resource "aws_instance" "dev5" {
-  ami           = "ami-06878d265978313ca"
-  instance_type = "t2.micro"
-  key_name      = "terraformlab1"
+  ami           = var.amis["us-east-1"]
+  instance_type = var.instance_type
+  key_name      = var.key_name
   tags = {
     Name = "dev5"
   }
@@ -54,9 +54,9 @@ resource "aws_instance" "dev5" {
 
 resource "aws_instance" "dev6" {
   provider      = aws.us-east-2
-  ami           = "ami-0a606d8395a538502"
-  instance_type = "t2.micro"
-  key_name      = "terraformlab1"
+  ami           = var.amis["us-east-2"]
+  instance_type = var.instance_type
+  key_name      = var.key_name
   tags = {
     Name = "dev6"
   }
@@ -64,4 +64,15 @@ resource "aws_instance" "dev6" {
   depends_on = [
     aws_dynamodb_table.basic-dynamodb-table
   ]
+}
+
+resource "aws_instance" "dev7" {
+  provider      = aws.us-east-2
+  ami           = var.amis["us-east-2"]
+  instance_type = var.instance_type
+  key_name      = var.key_name
+  tags = {
+    Name = "dev7"
+  }
+  vpc_security_group_ids = ["${aws_security_group.terraformlab1_SG-us-east-2.id}"]
 }
