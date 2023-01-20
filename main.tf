@@ -10,12 +10,14 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  #shared_credentials_file = "˜/.aws/credentials"
+  region                  = "us-east-1"
 }
 
 provider "aws" {
-  alias  = "us-east-2"
-  region = "us-east-2"
+  #shared_credentials_file = "˜/.aws/credentials"
+  alias                   = "us-east-2"
+  region                  = "us-east-2"
 }
 
 resource "aws_instance" "dev" {

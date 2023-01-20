@@ -31,3 +31,5 @@ override.tf.json
 **/ssl/*
 
 .terraform.lock.hcl
+
+.terraformrc
